@@ -8,7 +8,7 @@ COPY build/libs/ipGeofinderDiscovery-0.0.1-SNAPSHOT.jar /app/ipGeofinderDiscover
 WORKDIR /app
 
 # Exponer el puerto del microservicio
-EXPOSE 8080
+EXPOSE 8761
 
 # Ejecutar el microservicio
 CMD ["java", "-jar", "ipGeofinderDiscovery-0.0.1-SNAPSHOT.jar"]

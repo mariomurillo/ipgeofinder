@@ -46,7 +46,9 @@ You can verify that all services are runing with the discovery tool in this endp
 
 ## Discovery
 
-This project use Eureka like server of discovery
+This project use Eureka like server of discovery and you can see the status of each service similar to this:
+
+![eureka](images/eureka-dashboard.png)
 
 
 ## The Continuous Integration process for building the application:

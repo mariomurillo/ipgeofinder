@@ -1,17 +1,8 @@
 spring:
   datasource:
-    master:
-      url: jdbc:postgresql://master:5432/ip_geofinder
-      username: ip_geofinder_user
-      password: 12345
-    read_replica_1:
-      url: jdbc:postgresql://read_replica_1:5432/ip_geofinder
-      username: ip_geofinder_user
-      password: 12345
-    read_replica_2:
-      url: jdbc:postgresql://read_replica_2:5432/ip_geofinder
-      username: ip_geofinder_user
-      password: 12345
+    url: jdbc:postgresql://master_bd:5432/ip_geofinder
+    username: ip_geofinder_user
+    password: 12345
     driver-class-name: org.postgresql.Driver
   liquibase:
     enabled: true
@@ -44,3 +35,6 @@ server:
 eureka:
   instance:
     instance-id: ${spring.application.name}:${random.uuid}
+  client:
+    service-url:
+      defaultZone: http://eureka-server-host:8761/eureka/

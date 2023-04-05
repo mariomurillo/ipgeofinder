@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/IP-GeoFinder.main.iml" filepath="$PROJECT_DIR$/.idea/modules/IP-GeoFinder.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.example.IP-GeoFinder.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.example.IP-GeoFinder.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ipGeofinderLoad.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ipGeofinderLoad.main.iml" />
     </modules>
   </component>
 </project>

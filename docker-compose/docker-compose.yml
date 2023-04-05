@@ -3,56 +3,63 @@ version: '3.9'
 services:
   ipGeofinderLoad:
     build:
-      context: ../ipgeofinder
+      context: ../ipGeofinderLoad
       dockerfile: Dockerfile
     image: ip_geofinder_load
     ports:
       - "8081:8081"
     networks:
       - ip_geofinder_network
+      - db_network
     environment:
-      - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
+      - EUREKA_SERVER_URL=http://eureka-server-host:8761/eureka
     depends_on:
       - primary
+      - ipGeofinderDiscovery
 
   ipGeofinderQuery:
-    build:
-      context: ../ipGeofinderQuery
-      dockerfile: Dockerfile
-    image: ip_geofinder_query
-    ports:
-      - "8082:8082"
-    networks:
-      - ip_geofinder_network
-    environment:
-        - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
-    depends_on:
-      - standby1
-      - standby2
+     build:
+       context: ../ipGeofinderQuery
+       dockerfile: Dockerfile
+     image: ip_geofinder_query
+     ports:
+       - "8082:8082"
+     networks:
+       - ip_geofinder_network
+       - db_network
+     environment:
+         - EUREKA_SERVER_URL=http://eureka-server-host:8761/eureka
+     depends_on:
+       - standby1
+       #- standby2
+       - ipGeofinderLoad
 
   ipGeofinderDiscovery:
-    build:
-      context: ../ipGeofinderDiscovery
-      dockerfile: Dockerfile
-    image: ip_geofinder_discovery
-    ports:
-      - "8761:8761"
-    networks:
-      - ip_geofinder_network
+     build:
+       context: ../ipGeofinderDiscovery
+       dockerfile: Dockerfile
+     image: ip_geofinder_discovery
+     ports:
+       - "8761:8761"
+     networks:
+       ip_geofinder_network:
+         aliases:
+           - eureka-server-host
+     hostname: eureka-server-host
 
   ipGeofinderGateway:
-    build:
-      context: ../ipGeofinderGateway
-      dockerfile: Dockerfile
-    image: ip_geofinder_gateway
-    ports:
-      - "8080:8080"
-    networks:
-      - ip_geofinder_network
-    environment:
-        - EUREKA_SERVER_URL=http://eureka-server:8761/eureka
-    depends_on:
-      - ipGeofinderDiscovery
+     build:
+       context: ../ipGeofinderGateway
+       dockerfile: Dockerfile
+     image: ip_geofinder_gateway
+     ports:
+       - "8080:8080"
+     networks:
+       - ip_geofinder_network
+     environment:
+         - EUREKA_SERVER_URL=http://eureka-server-host:8761/eureka
+     depends_on:
+       - ipGeofinderDiscovery
 
   primary:
     image: postgres:13
@@ -70,8 +77,11 @@ services:
       - ./data/primary:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    hostname: master_bd
     networks:
-      - db_network
+      db_network:
+        aliases:
+          - master_bd
 
   standby1:
     image: postgres:13
@@ -90,8 +100,11 @@ services:
       - REPLICATION_PRIMARY_PASSWORD=12345
     volumes:
       - ./data/standby1:/var/lib/postgresql/data
+    hostname: standby1_bd
     networks:
-      - db_network
+      db_network:
+        aliases:
+          - standby1_bd
 
   standby2:
     image: postgres:13
@@ -110,8 +123,11 @@ services:
       - REPLICATION_PRIMARY_PASSWORD=12345
     volumes:
       - ./data/standby2:/var/lib/postgresql/data
+    hostname: standby2_bd
     networks:
-      - db_network
+      db_network:
+        aliases:
+          - standby2_bd
 
 networks:
   db_network:
