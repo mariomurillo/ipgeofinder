@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: ip-finder-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      routes[0]:
+        id: ip-data-loader-service
+        uri: lb://IP-DATA-LOADER-SERVICE
+        predicates[0]: Path=/data/**
+      routes[1]:
+        id: ip-geofinder
+        uri: lb://IP-GEOFINDER
+        predicates[0]: Path=/info/ip/**
+      discovery:
+        locator:
+          enabled: true
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}

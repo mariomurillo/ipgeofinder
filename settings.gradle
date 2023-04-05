@@ -1,1 +1,5 @@
-rootProject.name = 'IP-GeoFinder'
+rootProject.name = 'ipgeofinder'
+include 'ipGeofinderLoad'
+include 'ipGeofinderQuery'
+include 'ipGeofinderDiscovery'
+include 'ipGeofinderGateway'

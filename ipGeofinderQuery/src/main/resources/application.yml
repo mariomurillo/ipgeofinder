@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    master:
+      url: jdbc:postgresql://master:5432/ip_geofinder
+      username: ip_geofinder_user
+      password: 12345
+    read_replica_1:
+      url: jdbc:postgresql://read_replica_1:5432/ip_geofinder
+      username: ip_geofinder_user
+      password: 12345
+    read_replica_2:
+      url: jdbc:postgresql://read_replica_2:5432/ip_geofinder
+      username: ip_geofinder_user
+      password: 12345
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ip_geofinder_schema
+        jdbc:
+          read_replica_1:
+            weight: 1
+          read_replica_2:
+            weight: 2
+          routing:
+            type: simple
+            read_replicas:
+              - read_replica_1
+              - read_replica_2
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL91Dialect
+  application:
+    name: ip-geofinder
+server:
+  port: 0
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+

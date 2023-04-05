@@ -1,0 +1,46 @@
+spring:
+  datasource:
+    master:
+      url: jdbc:postgresql://master:5432/ip_geofinder
+      username: ip_geofinder_user
+      password: 12345
+    read_replica_1:
+      url: jdbc:postgresql://read_replica_1:5432/ip_geofinder
+      username: ip_geofinder_user
+      password: 12345
+    read_replica_2:
+      url: jdbc:postgresql://read_replica_2:5432/ip_geofinder
+      username: ip_geofinder_user
+      password: 12345
+    driver-class-name: org.postgresql.Driver
+  liquibase:
+    enabled: true
+    change-log: classpath:db/db.changelog-master.xml
+    default-schema: ip_geofinder_schema
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ip_geofinder_schema
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL91Dialect
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  application:
+    name: ip-data-loader-service
+  sql:
+    init:
+      mode: always
+csv:
+  headers: IP_from, IP_to, Country_code, Country, Region, City, Latitude, Longitude, Isp
+  concurrency:
+    limit: 4
+  block:
+    size: 1000
+server:
+  port: 0
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
